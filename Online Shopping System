@@ -1,0 +1,135 @@
+
+
+class Product:
+    def __init__(self, product_id, name, price, stock):
+        self.product_id = product_id
+        self.name = name
+        self.price = price
+        self.stock = stock
+
+    def update_stock(self, quantity):
+        if quantity <= self.stock:
+            self.stock -= quantity
+        else:
+            raise ValueError(f"Not enough stock for {self.name}")
+
+    def __str__(self):
+        return f"[{self.product_id}] {self.name} - ₹{self.price} (Stock: {self.stock})"
+
+
+class Customer:
+    def __init__(self, customer_id, name, email):
+        self.customer_id = customer_id
+        self.name = name
+        self.email = email
+
+    def __str__(self):
+        return f"{self.name} ({self.email})"
+
+
+class Cart:
+    def __init__(self):
+        self.items = {}  # {product: quantity}
+
+    def add_item(self, product, quantity):
+        if quantity > product.stock:
+            print(f"Only {product.stock} left for {product.name}. Cannot add {quantity}.")
+            return
+        product.update_stock(quantity)
+        if product in self.items:
+            self.items[product] += quantity
+        else:
+            self.items[product] = quantity
+        print(f"✅ Added {quantity} x {product.name} to cart.")
+
+    def calculate_total(self):
+        return sum(product.price * qty for product, qty in self.items.items())
+
+    def show_cart(self):
+        if not self.items:
+            print("🛒 Your cart is empty.")
+            return
+        print("\n🛒 Your Cart:")
+        for product, qty in self.items.items():
+            print(f"{product.name} x{qty} = ₹{product.price * qty}")
+        print(f"🧾 Total Amount: ₹{self.calculate_total()}")
+
+
+class Order:
+    def __init__(self, customer, cart):
+        self.customer = customer
+        self.cart = cart
+        self.total_amount = cart.calculate_total()
+
+    def generate_invoice(self):
+        print("\n🧾 Invoice")
+        print("Customer:", self.customer)
+        self.cart.show_cart()
+        print(f"💵 Total Due: ₹{self.total_amount}")
+        print("🙏 Thank you for shopping with us!\n")
+
+
+# --------- 🧪 Example Usage ---------
+
+# Sample Products
+products = [
+    Product(101, "Smartphone", 25000, 5),
+    Product(102, "Earbuds", 2000, 15),
+    Product(103, "Charger", 800, 10),
+    Product(104, "Power Bank", 1500, 8),
+    Product(105, "USB Cable", 300, 20)
+]
+
+# Get Customer Info
+print("👋 Welcome to the Online Shopping System!")
+name = input("Enter your name: ")
+email = input("Enter your email: ")
+customer = Customer(1, name, email)
+
+# Shopping Begins
+cart = Cart()
+
+while True:
+    print("\n📋 Menu:")
+    print("1. View Products")
+    print("2. Add to Cart")
+    print("3. View Cart")
+    print("4. Checkout")
+    print("5. Exit")
+
+    choice = input("Choose an option (1-5): ")
+
+    if choice == "1":
+        print("\n🛍️ Available Products:")
+        for p in products:
+            print(p)
+
+    elif choice == "2":
+        product_id = int(input("Enter Product ID to add: "))
+        quantity = int(input("Enter Quantity: "))
+        selected = next((p for p in products if p.product_id == product_id), None)
+        if selected:
+            try:
+                cart.add_item(selected, quantity)
+            except ValueError as e:
+                print("❌", e)
+        else:
+            print("❌ Product not found.")
+
+    elif choice == "3":
+        cart.show_cart()
+
+    elif choice == "4":
+        if not cart.items:
+            print("🛒 Cart is empty. Please add items first.")
+        else:
+            order = Order(customer, cart)
+            order.generate_invoice()
+            break  # Exit after placing order
+
+    elif choice == "5":
+        print("👋 Thank you! Visit again.")
+        break
+
+    else:
+        print("❌ Invalid choice. Try again.")
