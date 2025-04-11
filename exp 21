@@ -1,0 +1,55 @@
+class Product:
+    def __init__(self, pid, name, price, stock):
+        self.pid, self.name, self.price, self.stock = pid, name, price, stock
+
+    def update_stock(self, qty):
+        if qty > self.stock:
+            raise ValueError(f"Not enough stock for {self.name}")
+        self.stock -= qty
+
+    def __str__(self):
+        return f"[{self.pid}] {self.name} - ₹{self.price} (Stock: {self.stock})"
+
+
+class Customer:
+    def __init__(self, cid, name, email):
+        self.cid, self.name, self.email = cid, name, email
+
+    def __str__(self):
+        return f"{self.name} ({self.email})"
+
+
+class Cart:
+    def __init__(self):
+        self.items = {}
+
+    def add_item(self, product, qty):
+        if qty > product.stock:
+            print(f"Only {product.stock} left for {product.name}.")
+            return
+        product.update_stock(qty)
+        self.items[product] = self.items.get(product, 0) + qty
+        print(f"✅ Added {qty} x {product.name} to cart.")
+
+    def show(self):
+        if not self.items:
+            print("🛒 Your cart is empty.")
+            return
+        print("\n🛒 Cart:")
+        for p, q in self.items.items():
+            print(f"{p.name} x{q} = ₹{p.price * q}")
+        print(f"🧾 Total: ₹{self.total()}")
+
+    def total(self):
+        return sum(p.price * q for p, q in self.items.items())
+
+
+class Order:
+    def __init__(self, customer, cart):
+        self.customer, self.cart = customer, cart
+
+    def invoice(self):
+        print("\n🧾 Invoice")
+        print("Customer:", self.customer)
+        self.cart.show()
+        print("🙏 Thanks for shopping!\n")
