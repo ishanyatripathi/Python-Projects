@@ -15,4 +15,4 @@ def extract_data(filename):
     print("Extracted Dates:", ["/".join(date) for date in dates])
 
 # Run the extraction function with a sample text file
-extract_data("sample.txt")
+extract_data("sample.txt") 
