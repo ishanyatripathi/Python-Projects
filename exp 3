@@ -1,0 +1,18 @@
+def grossSalary():
+    try:
+        bs = float(input("Enter Basic Salary: "))
+        if bs < 0:
+            print("Basic salary cannot be negative.")
+            return
+
+        da = (bs * 70) / 100  # Dearness Allowance
+        ta = (bs * 30) / 100  # Travel Allowance
+        hra = (bs * 10) / 100 # House Rent Allowance
+
+        grossSal = bs + da + ta + hra
+
+        print(f"Gross Salary: {grossSal:.2f}")
+    except ValueError:
+        print("Please enter a valid number for the basic salary.")
+
+grossSalary()
