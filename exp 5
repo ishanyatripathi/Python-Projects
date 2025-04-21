@@ -1,0 +1,72 @@
+task = []
+
+def addtask():
+    t = input("Enter task: ")
+    p = int(input("Enter Task Priority: "))
+    task.append((t, p))
+    print("Task added successfully..\n")
+
+def removetask():
+    displaytask()
+    try:
+        ind = int(input("Enter Index to remove (starting from 1): "))
+        task.pop(ind - 1)
+        print("Task removed successfully.\n")
+    except (IndexError, ValueError):
+        print("Invalid index.\n")
+
+def updatetask():
+    displaytask()
+    try:
+        ind = int(input("Enter Index to update (starting from 1): ")) - 1
+        t = input("Enter new task: ")
+        p = int(input("Enter new Task Priority: "))
+        task[ind] = (t, p)
+        print("Task updated successfully.\n")
+    except (IndexError, ValueError):
+        print("Invalid index.\n")
+
+def displaytask():
+    if not task:
+        print("No tasks to display.\n")
+        return
+    for idx, x in enumerate(task, start=1):
+        print(f"{idx}. Task: {x[0]}  |  Priority: {x[1]}")
+    print()
+
+def sortingtask():
+    task.sort(key=lambda x: x[1])  # Sort by priority (lower value = higher priority)
+    print("Tasks sorted by priority:\n")
+    displaytask()
+
+# Main menu loop
+while True:
+    try:
+        ch = int(input(
+            "Enter Choice:\n"
+            "1. Add Task\n"
+            "2. Remove Task\n"
+            "3. Update Task\n"
+            "4. Display Tasks\n"
+            "5. Sort Tasks by Priority\n"
+            "6. Exit\n"
+            "Enter choice: "
+        ))
+
+        if ch == 1:
+            addtask()
+        elif ch == 2:
+            removetask()
+        elif ch == 3:
+            updatetask()
+        elif ch == 4:
+            displaytask()
+        elif ch == 5:
+            sortingtask()
+        elif ch == 6:
+            print("Exiting the Task Manager. Goodbye!")
+            break
+        else:
+            print("Enter a valid choice between 1 to 6.\n")
+    except ValueError:
+        print("Invalid input. Please enter a number.\n")
