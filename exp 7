@@ -1,0 +1,101 @@
+student = {
+    "101": {
+        "name": "Vishal",
+        "age": 23,
+        "city": "Nerul",
+        "grade": "A",
+        "attendance": 75
+    },
+    "102": {
+        "name": "Rohan",
+        "age": 22,
+        "city": "Vashi",
+        "grade": "B",
+        "attendance": 55
+    },
+    "103": {
+        "name": "Neha",
+        "age": 23,
+        "city": "Nerul",
+        "grade": "A",
+        "attendance": 65
+    },
+}
+
+def create():
+    roll = input("Enter Roll: ")
+    name = input("Enter name: ")
+    age = input("Enter Age: ")
+    city = input("Enter City: ")
+    grade = input("Enter Grade: ")
+    attendance = int(input("Enter Attendance: "))
+    
+    student[roll] = {
+        "name": name,
+        "age": age,
+        "city": city,
+        "grade": grade,
+        "attendance": attendance
+    }
+    print("Record added in student dictionary!")
+
+def update(attribute):
+    roll = input(f"Enter Roll to update student {attribute}: ")
+    if roll not in student:
+        print("Invalid Roll number!")
+        return
+    
+    new_value = input(f"Enter updated {attribute}: ")
+    
+    if attribute == "attendance":
+        new_value = int(new_value)
+    
+    student[roll][attribute] = new_value
+    print(f"{attribute.capitalize()} updated successfully!")
+
+def display():
+    for roll, details in student.items():
+        print(f"Roll: {roll}")
+        for key, value in details.items():
+            print(f"{key.capitalize()} : {value}")
+        print()
+
+def avg():
+    total = sum(student[x]["attendance"] for x in student)
+    average = total / len(student)
+    print(f"Average attendance of class: {average:.2f}")
+
+while True:
+    print("\n1. Create Student Record")
+    print("2. Update Student Name")
+    print("3. Update Student Age")
+    print("4. Update Student City")
+    print("5. Update Student Grade")
+    print("6. Update Student Attendance")
+    print("7. Display All Records")
+    print("8. Find Average Attendance")
+    print("9. Exit")
+    
+    choice = int(input("Enter your choice (1-9): "))
+    
+    if choice == 1:
+        create()
+    elif choice == 2:
+        update("name")
+    elif choice == 3:
+        update("age")
+    elif choice == 4:
+        update("city")
+    elif choice == 5:
+        update("grade")
+    elif choice == 6:
+        update("attendance")
+    elif choice == 7:
+        display()
+    elif choice == 8:
+        avg()
+    elif choice == 9:
+        print("Thank you! Visit Again!")
+        break
+    else:
+        print("Please choose a valid option (1-9).")
